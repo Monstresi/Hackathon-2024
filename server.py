@@ -4,6 +4,7 @@ import json
 
 clients = []   # List to keep track of connected clients
 usernames = []
+messages = []
 
 file_lock = threading.Lock()
 
@@ -25,9 +26,14 @@ class ChatHandler(socketserver.BaseRequestHandler):
                 if not message:
                     break  # Client disconnected
                 print(f"Received from {username}: {message}")
+                messages.append(f"{username}: {message}")
                 
                 # Broadcast the message to all connected clients
                 broadcast_message(f"{username} says: {message}", self.request)
+
+                if len(messages) > 20:
+                    voting_packet = "PKT_MSG_VTE"
+                    broadcast_message(voting_packet, self.request)
         except ConnectionResetError:
             print(f"{self.client_address} disconnected unexpectedly.")
         finally:
