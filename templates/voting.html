@@ -14,14 +14,18 @@
         
             {% endfor %}
         </ul>
-        <script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+        <script type="text/javascript">
+            var socket = io.connect(window.location.origin)
             let usernameButtons = document.querySelectorAll('.user-buttons');
             usernameButtons.forEach((button) => {
                 button.addEventListener('click', () => {
+                    console.log('Buton clicked');
                     let username = button.dataset.username;
-                    socket.emit('send_username', {'usr': username});
+                    socket.emit('send_username', {usr: username});
                 });
             });
+            
 
             socket.on('redirect', (data) => {
                 window.location.href = data.url;

@@ -97,6 +97,7 @@ def handle_send_message(data):
 @socketio.on('send_username')
 def collate_usernames(data):
     username = data['usr']
+    print(f"Username entered: {username}")
     protocol = 'PKT_MSG_USRVTE'
     msg_packet = f"{protocol}:{username}"
     send_to_others(msg_packet)

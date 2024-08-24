@@ -54,10 +54,11 @@ class ChatHandler(socketserver.BaseRequestHandler):
                     break  # Client disconnected
                 print(f"Received from {username}: {message}")
                 if message[:14] == 'PKT_MSG_USRVTE':
+                    print("ENTERED USRVTE")
                     votes.append(message.split(':')[1])
                     if len(votes) == len(usernames):
                         most_common_vote = find_most_common()
-                        print(most_common_vote)
+                        print(f"Most common vote: {most_common_vote}")
                         result_packet = f"PKT_MSG_RES:{most_common_vote}"
                         broadcast_message(result_packet, self.request)
                     continue
@@ -109,7 +110,7 @@ def find_most_common():
     for usr in usr_map:
         if usr_map[usr] > most_common:
             most_common = usr_map[usr]
-            most_common_usr = usr_map[usr]
+            most_common_usr = usr
     return most_common_usr
 
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
