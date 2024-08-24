@@ -63,6 +63,7 @@ class ChatHandler(socketserver.BaseRequestHandler):
                     if len(votes) == len(usernames):
                         most_common_vote = find_most_common()
                         print(f"Most common vote: {most_common_vote}")
+                        print(imposter)
                         if most_common_vote == imposter:
                             result_packet = f"PKT_MSG_RES:{most_common_vote}:Win"
                         else:
