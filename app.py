@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template
 import requests
 import socket
+import threading
 
     
 app = Flask(__name__)
@@ -13,6 +14,20 @@ try:
     print("Connected to server")
 except ConnectionRefusedError:
     print("Failed to connect to the server")
+
+def receive_messages():
+    while True:
+        try:
+            # Receive and print messages from the server
+            message = s.recv(1024).decode()
+            if not message:
+                break
+            print(message)
+        except:
+            print("Connection closed by the server.")
+            break
+
+receive_thread = threading.Thread(target=receive_messages)
 
 @app.route('/', methods=['GET'])
 def index():
