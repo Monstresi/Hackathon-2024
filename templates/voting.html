@@ -1,10 +1,31 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <style>
 
+        </style>
     </head>
 
     <body>
         <h1>Voting</h1>
+        <ul>
+            {% for username in usernames %}
+                <li>{{ username }} <button data-username="{{ username }}" class="user-buttons">Vote</button> </li>
+        
+            {% endfor %}
+        </ul>
+        <script>
+            let usernameButtons = document.querySelectorAll('.user-buttons');
+            usernameButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    let username = button.dataset.username;
+                    socket.emit('send_username', {'usr': username});
+                });
+            });
+
+            socket.on('redirect', (data) => {
+                window.location.href = data.url;
+            });
+        </script>
     </body>
 </html>

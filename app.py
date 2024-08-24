@@ -10,6 +10,9 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_ip = '10.19.254.160'
 server_port = 9999
 messages = []
+usernames = []
+result = None
+
 try:
     s.connect((server_ip, server_port))
     print("Connected to server")
@@ -24,9 +27,15 @@ def receive_messages():
             if not message:
                 break
             print(message)
-            if message == 'PKT_MSG_VTE':
-                print("LIMIT REACHED")
+            if message[:11] == 'PKT_MSG_VTE':
+                global usernames
+                usernames = message.split(';')[1].split(':')
                 socketio.emit('redirect', {'url': '/voting'})
+            if message[:11] == 'PKT_MSG_RES':
+                global result
+                result = message.split(':')[1]
+                socketio.emit('redirect', {'url': '/results'})
+            
             messages.append(message)
             
             # Emit the message to all connected WebSocket clients
@@ -46,8 +55,14 @@ def index(flag=False):
 
 @app.route('/voting')
 def vote():
-    return render_template('voting.html')
+    global usernames
+    print(f"Printing usernames now: {usernames}")
+    return render_template('voting.html', usernames=usernames)
 
+@app.route('/results')
+def results():
+    global result
+    return render_template('result.html', result=result)
 
 
 @socketio.on('send_message')
@@ -60,6 +75,13 @@ def handle_send_message(data):
 
     # Emit the message back to all connected WebSocket clients
     socketio.emit('message', {'msg': f'You: {message}'})
+
+@socketio.on('send_username')
+def collate_usernames(data):
+    username = data['usr']
+    protocol = 'PKT_MSG_USRVTE'
+    msg_packet = f"{protocol}:{username}"
+    send_to_others(msg_packet)
 
 @app.route('/assets/<filename>')
 def serve_static(filename):

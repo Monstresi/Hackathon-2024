@@ -251,7 +251,6 @@
         document.getElementById('chat-form').addEventListener('submit', function(e) {
             e.preventDefault();
             var userInput = document.getElementById('user_input').value;
-            socket.emit('send_message', {msg: userInput});
             document.getElementById('user_input').value = '';
         });
 

@@ -7,6 +7,7 @@ import random
 clients = []   # List to keep track of connected clients
 usernames = []
 messages = []
+votes = []
 
 file_lock = threading.Lock()
 
@@ -45,6 +46,14 @@ class ChatHandler(socketserver.BaseRequestHandler):
                 if not message:
                     break  # Client disconnected
                 print(f"Received from {username}: {message}")
+                if message[:14] == 'PKT_MSG_USRVTE':
+                    votes.append(message.split(':')[1])
+                    if len(votes) == len(usernames):
+                        most_common_vote = find_most_common()
+                        print(most_common_vote)
+                        result_packet = f"PKT_MSG_RES:{most_common_vote}"
+                        broadcast_message(result_packet, self.request)
+                    continue
                 messages.append(f"{username}: {message}")
                 
                 # Broadcast the message to all connected clients
@@ -80,6 +89,21 @@ def broadcast_message(message, sender_socket):
             except:
                 # Handle broken connection during broadcast
                 clients.remove(client)
+
+def find_most_common():
+    usr_map = {}
+    for username in usernames:
+        if username in usr_map:
+            usr_map[username] += 1
+        else:
+            usr_map[username] = 1
+    most_common = 0
+    most_common_usr = ''
+    for usr in usr_map:
+        if usr_map[usr] > most_common:
+            most_common = usr_map[usr]
+            most_common_usr = usr_map[usr]
+    return most_common_usr
 
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     pass
