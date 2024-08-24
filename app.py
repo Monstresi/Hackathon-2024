@@ -18,7 +18,6 @@ except ConnectionRefusedError:
 
 def receive_messages():
     while True:
-        'PKT_MSG_VTE'
         try:
             # Receive and broadcast messages from the server to all clients
             message = s.recv(1024).decode()
@@ -26,6 +25,7 @@ def receive_messages():
                 break
             print(message)
             if message == 'PKT_MSG_VTE':
+                print("LIMIT REACHED")
                 socketio.emit('redirect', {'url': '/voting'})
             messages.append(message)
             

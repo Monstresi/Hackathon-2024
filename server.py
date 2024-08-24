@@ -33,13 +33,25 @@ class ChatHandler(socketserver.BaseRequestHandler):
 
                 if len(messages) > 20:
                     voting_packet = "PKT_MSG_VTE"
-                    broadcast_message(voting_packet, self.request)
+                    # "PKT_MSG_VTE;Hassan:Ronaldo:Messi:Salah:Kane"
+                    names = ":".join(usernames)
+                    broadcast_msg = f"{voting_packet};{names}"
+                    print(f"Broadcasting: {broadcast_msg}")
+                    broadcast_all(broadcast_msg, self.request)
         except ConnectionResetError:
             print(f"{self.client_address} disconnected unexpectedly.")
         finally:
             clients.remove(self.request)
             print(f"{self.client_address} disconnected.")
             self.request.close()
+
+def broadcast_all(message, sender_socket):
+    for client in clients:        
+        try:
+            client.sendall(message.encode())
+        except:
+            # Handle broken connection during broadcast
+            clients.remove(client)
 
 def broadcast_message(message, sender_socket):
     for client in clients:
