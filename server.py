@@ -45,6 +45,7 @@ class ChatHandler(socketserver.BaseRequestHandler):
             random_number = random.randint(1, 5) # For the image
             imposter_number = random.randint(0, len(usernames) - 1)
             imposter = usernames[imposter_number]
+            print(f"the imposter in 48 is {imposter}")
             broadcast_msg = f"{start_packet}:{random_number}:{usernames[imposter_number]}"
             print(f"Broadcasting: {broadcast_msg}\n")
             broadcast_all(broadcast_msg, self.request)
@@ -66,6 +67,7 @@ class ChatHandler(socketserver.BaseRequestHandler):
                             result_packet = f"PKT_MSG_RES:{most_common_vote}:Win"
                         else:
                             result_packet = f"PKT_MSG_RES:{most_common_vote}:Lose"
+                        print(f"result packet is {result_packet}")
                         broadcast_all(result_packet, self.request)
                     continue
                 messages.append(f"{username}: {message}")
