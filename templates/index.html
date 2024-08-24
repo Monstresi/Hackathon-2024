@@ -19,19 +19,19 @@
             align-items: center;
             min-height: 100vh;
             justify-content: center;
-            background-color: #1c1c1c; /* Dark background */
+            background-color: #181414; /* Dark background */
         }
     
         .header {
             width: 100%;
             text-align: center;
-            background-color: #311b92; /* Darker Purple */
+            background-color: #242424; /* Slightly lighter than body */
             padding: 20px 0;
             margin-bottom: 30px;
             color: #f8f9fa;
             font-size: 2.2em;
             font-weight: bold;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Darker shadow */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6); /* Darker shadow */
         }
     
         .container {
@@ -41,14 +41,14 @@
             justify-content: space-between;
             padding: 20px;
             box-sizing: border-box;
-            background-color: #2c2c54; /* Darker Purple */
+            background-color: #2e2e2e; /* Dark gray */
             border-radius: 12px;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5); /* Darker shadow */
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.6); /* Darker shadow */
         }
     
         .image-box {
             flex: 2;
-            background-color: #311b92; /* Darker Purple */
+            background-color: #242424; /* Dark gray */
             border-radius: 12px;
             padding: 20px;
             display: flex;
@@ -56,7 +56,7 @@
             justify-content: center;
             align-items: center;
             margin-right: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); /* Darker shadow */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Darker shadow */
         }
     
         .image-box img {
@@ -75,19 +75,19 @@
     
         .chat-box {
             flex: 2;
-            background-color: #311b92; /* Darker Purple */
+            background-color: #242424; /* Dark gray */
             border-radius: 12px;
             padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             color: #f8f9fa;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); /* Darker shadow */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Darker shadow */
             max-height: 600px;
         }
     
         .chat-header {
-            background-color: #2c2c54; /* Darker Purple */
+            background-color: #2e2e2e; /* Dark gray */
             padding: 10px;
             border-radius: 8px;
             text-align: center;
@@ -101,9 +101,9 @@
             overflow-y: auto;
             margin: 20px 0;
             padding: 10px;
-            background-color: #1a1a40; /* Darkest Purple */
+            background-color: #181818; /* Darkest gray */
             border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3); /* Darker shadow */
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4); /* Darker shadow */
         }
     
         .chat-input {
@@ -111,7 +111,7 @@
         }
     
         .guess-button {
-            background-color: #2c2c54; /* Darker Purple */
+            background-color: #2e2e2e; /* Dark gray */
             color: white;
             border: none;
             padding: 10px 20px;
@@ -122,7 +122,7 @@
         }
     
         .send-button {
-            background-color: #2c2c54; /* Darker Purple */
+            background-color: #2e2e2e; /* Dark gray */
             color: white;
             border: none;
             padding: 10px 20px;
@@ -144,7 +144,7 @@
         }
     
         .chat-input button {
-            background-color: #2c2c54; /* Darker Purple */
+            background-color: #2e2e2e; /* Dark gray */
             color: white;
             border: none;
             padding: 10px 20px;
@@ -154,43 +154,12 @@
         }
     
         .chat-input button:hover {
-            background-color: #1a1a40; /* Darkest Purple */
+            background-color: #181818; /* Darkest gray */
         }
     
-        .players-list {
-            margin-top: 30px;
-            background-color: #311b92; /* Darker Purple */
-            padding: 15px;
-            border-radius: 12px;
-            color: #f8f9fa;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Darker shadow */
-            width: 80%;
-            max-width: 1200px;
-            text-align: center;
-        }
-    
-        .players-list h3 {
-            margin-top: 0;
-            font-size: 1.4em;
-            color: #f8f9fa;
-        }
-    
-        .players-list ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 10px 0 0 0;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-    
-        .players-list ul li {
-            margin: 5px 15px;
-            font-size: 1.1em;
-            color: #e4e4e4;
-        }
+        
     </style>
-    
+        
 </head>
 <body>
     <div class="header">
@@ -199,7 +168,7 @@
 
     <div class="container">
         <div class="image-box">
-            <img id="random-image" src="" alt="Random Image">
+            <img id="random-image" src="https://via.placeholder.com/500" alt="Random Image">
             <div class="image-name" id="image-name">Image Name or Description</div>
         </div>        
         
@@ -221,16 +190,16 @@
         </div>
     </div>
 
-    <div class="players-list">
+    <!-- <div class="players-list">
         <h3>Players in the Game</h3>
         <ul>
             <li>Player 1</li>
             <li>Player 2</li>
             <li>Player 3</li>
             <li>Player 4</li>
-            <!-- More players can be added here -->
+            
         </ul>
-    </div>
+    </div> -->
 
     <!-- Include Socket.IO -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
