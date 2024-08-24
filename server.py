@@ -8,7 +8,7 @@ class ChatHandler(socketserver.BaseRequestHandler):
         # Add the new client connection to the list of clients
         username = self.request.recv(1024).decode()
         clients.append(self.request)
-        print(f"{self.client_address} connected.")
+        print(f"{self.client_address}/{username} connected.")
         
         try:
             while True:
@@ -16,7 +16,7 @@ class ChatHandler(socketserver.BaseRequestHandler):
                 message = self.request.recv(1024).decode()
                 if not message:
                     break  # Client disconnected
-                print(f"Received from {self.client_address}: {message}")
+                print(f"Received from {username}: {message}")
                 
                 # Broadcast the message to all connected clients
                 broadcast_message(f"{self.client_address} says: {message}", self.request)
@@ -41,6 +41,7 @@ class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 if __name__ == "__main__":
     HOST, PORT = "0.0.0.0", 9999
+    socketserver.TCPServer.allow_reuse_address = True
     with ThreadedTCPServer((HOST, PORT), ChatHandler) as server:
         print("Chat room server started on port", PORT)
         server.serve_forever()
