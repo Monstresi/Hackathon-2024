@@ -11,7 +11,7 @@
             padding: 0;
             color: #f8f9fa;
             /* Update this path to the correct location of your image */
-            background: url('img2.jpg') no-repeat center center fixed;
+            background: url('assets/img2.jpg') no-repeat center center fixed;
             background-size: cover;
             display: flex;
             flex-direction: column;
@@ -108,6 +108,28 @@
             display: flex;
         }
 
+        .guess-button {
+            background-color: #1b1b2f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 10px;
+        }
+
+        .send-button {
+            background-color: #1b1b2f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 10px;
+        }
+
         .chat-input input {
             flex-grow: 1;
             padding: 10px;
@@ -187,7 +209,8 @@
             </div>
             <div class="chat-input">
                 <input type="text" placeholder="Type a message...">
-                <button>Send</button>
+                <button class="send-button">Send</button>
+                <button class="guess-button">Guess</button>
             </div>
         </div>
     </div>
