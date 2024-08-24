@@ -1,12 +1,23 @@
 import socketserver
 import threading
 import json
+import sys
+import random
 
 clients = []   # List to keep track of connected clients
 usernames = []
 messages = []
 
 file_lock = threading.Lock()
+
+# Check if there are enough arguments
+if len(sys.argv) < 2:
+    print("Usage: python script.py <argument>")
+    sys.exit(1)
+else:
+    # Get the argument (second item in the list)
+    max_clients = sys.argv[1]
+
 
 class ChatHandler(socketserver.BaseRequestHandler):
     def handle(self):
@@ -18,6 +29,14 @@ class ChatHandler(socketserver.BaseRequestHandler):
             with open('users.json', 'w') as file:
                 json.dump(usernames, file, indent=4)
         print(f"{self.client_address}/{username} connected.")
+
+        # If everyone has connected
+        if len(clients) == max_clients:
+            start_packet = "PKT_MSG_STR"
+            random_number = random.randint(1, 5)
+            voting_packet = f"{start_packet}:{random_number}"
+            print(f"Broadcasting: {broadcast_msg}")
+            broadcast_all(broadcast_msg, self.request)
         
         try:
             while True:
