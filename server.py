@@ -1,43 +1,45 @@
-import socket
+import socketserver
+import threading
 
-def create_socket():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    return s
+clients = []  # List to keep track of connected clients
 
-def host_game(host, port):
-    s = create_socket()
-    s.bind((host, port))
-    s.listen(1)
-    print("Waiting for player...")
-    conn, addr = s.accept()
-    print(f"Connected by {addr}")
+class ChatHandler(socketserver.BaseRequestHandler):
+    def handle(self):
+        # Add the new client connection to the list of clients
+        clients.append(self.request)
+        print(f"{self.client_address} connected.")
+        
+        try:
+            while True:
+                # Receive a message from the client
+                message = self.request.recv(1024).decode()
+                if not message:
+                    break  # Client disconnected
+                print(f"Received from {self.client_address}: {message}")
+                
+                # Broadcast the message to all connected clients
+                broadcast_message(f"{self.client_address} says: {message}", self.request)
+        except ConnectionResetError:
+            print(f"{self.client_address} disconnected unexpectedly.")
+        finally:
+            clients.remove(self.request)
+            print(f"{self.client_address} disconnected.")
+            self.request.close()
 
-    while True:
-        move = input("Enter your move: ")
-        conn.sendall(move.encode())
-        response = conn.recv(1024).decode()
-        print(f"Opponent's move: {response}")
+def broadcast_message(message, sender_socket):
+    for client in clients:
+        if client != sender_socket:  # Do not send the message back to the sender
+            try:
+                client.sendall(message.encode())
+            except:
+                # Handle broken connection during broadcast
+                clients.remove(client)
 
-def join_game(host, port):
-    s = create_socket()
-    s.connect((host, port))
-    print("Connected to the host!")
-
-    while True:
-        response = s.recv(1024).decode()
-        print(f"Opponent's move: {response}")
-        move = input("Enter your move: ")
-        s.sendall(move.encode())
-
-def main():
-    #choice = input("Do you want to (h)ost or (j)oin a game? ")
-    choice = input("Would you like to host a game? (y/n) ")
-    
-    if choice == 'y':
-        host_game('10.19.254.160', 9999)
-    else:
-        return
+class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    pass
 
 if __name__ == "__main__":
-    main()
+    HOST, PORT = "0.0.0.0", 9999
+    with ThreadedTCPServer((HOST, PORT), ChatHandler) as server:
+        print("Chat room server started on port", PORT)
+        server.serve_forever()

@@ -1,43 +1,39 @@
 import socket
+import threading
 
-def create_socket():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    return s
-
-def host_game(host, port):
-    s = create_socket()
-    s.bind((host, port))
-    s.listen(1)
-    print("Waiting for player...")
-    conn, addr = s.accept()
-    print(f"Connected by {addr}")
-
+def receive_messages(sock):
     while True:
-        move = input("Enter your move: ")
-        conn.sendall(move.encode())
-        response = conn.recv(1024).decode()
-        print(f"Opponent's move: {response}")
-
-def join_game(host, port):
-    s = create_socket()
-    s.connect((host, port))
-    print("Connected to the host!")
-
-    while True:
-        response = s.recv(1024).decode()
-        print(f"Opponent's move: {response}")
-        move = input("Enter your move: ")
-        s.sendall(move.encode())
+        try:
+            # Receive and print messages from the server
+            message = sock.recv(1024).decode()
+            if not message:
+                break
+            print(message)
+        except:
+            print("Connection closed by the server.")
+            break
 
 def main():
-    #choice = input("Do you want to (h)ost or (j)oin a game? ")
-    choice = input("Would you like to join a game? (y/n) ")
-    
-    if choice == 'y':
-        join_game('10.19.254.160', 9999)
-    else:
-        return
+    host = '10.19.254.160' #input("Enter server IP: ")
+    port = 9999
+
+    # Create a socket and connect to the server
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((host, port))
+
+    # Start a thread for receiving messages from the server
+    receive_thread = threading.Thread(target=receive_messages, args=(sock,))
+    receive_thread.start()
+
+    try:
+        while True:
+            # Send messages to the server
+            message = input()
+            sock.sendall(message.encode())
+    except:
+        print("Connection closed.")
+    finally:
+        sock.close()
 
 if __name__ == "__main__":
     main()
