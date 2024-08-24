@@ -28,6 +28,7 @@ def receive_messages():
             break
 
 receive_thread = threading.Thread(target=receive_messages)
+receive_thread.start()
 
 @app.route('/', methods=['GET'])
 def index():
