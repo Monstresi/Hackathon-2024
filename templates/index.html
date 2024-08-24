@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional Web App</title>
+    <!-- Include Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -22,13 +24,28 @@
         .header {
             width: 100%;
             text-align: center;
-            background-color: #162447;
+            background-color: #3f3cbb; /* Dark Blue */
             padding: 20px 0;
             margin: 0;
             color: #f8f9fa;
             font-size: 2.2em;
             font-weight: bold;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .settings-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5em;
+            color: #f8f9fa;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .settings-icon:hover {
+            color: #c77dff; /* Light Purple */
         }
 
         .container {
@@ -38,7 +55,7 @@
             justify-content: space-between;
             padding: 20px;
             box-sizing: border-box;
-            background-color: #1f4068;
+            background-color: #6a1b9a; /* Purple */
             border-radius: 12px;
             box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
             margin-top: 30px;
@@ -47,7 +64,7 @@
         .image-box {
             position: relative; /* Needed for the overlay */
             flex: 2;
-            background-color: #1b1b2f;
+            background-color: #c77dff; /* Light Purple */
             border-radius: 12px;
             padding: 20px;
             display: flex;
@@ -57,6 +74,7 @@
             margin-right: 20px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             overflow: hidden; /* Ensures the overlay stays within the box */
+            transition: transform 0.3s ease;
         }
 
         .image-box img {
@@ -98,14 +116,14 @@
 
         .image-name {
             font-size: 1.2em;
-            color: #f8f9fa;
+            color: #3f3cbb; /* Dark Blue */
             text-align: center;
             margin-top: 10px;
         }
 
         .chat-box {
             flex: 2;
-            background-color: #162447;
+            background-color: #3f3cbb; /* Dark Blue */
             border-radius: 12px;
             padding: 20px;
             display: flex;
@@ -114,16 +132,17 @@
             color: #f8f9fa;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             max-height: 600px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .chat-header {
-            background-color: #1b1b2f;
+            background-color: #c77dff; /* Light Purple */
             padding: 10px;
             border-radius: 8px;
             text-align: center;
             font-size: 1.3em;
             font-weight: bold;
-            color: #f8f9fa;
+            color: #3f3cbb; /* Dark Blue */
         }
 
         .chat-messages {
@@ -131,7 +150,7 @@
             overflow-y: auto;
             margin: 20px 0;
             padding: 10px;
-            background-color: #0f3460;
+            background-color: #7e57c2; /* Medium Purple */
             border-radius: 8px;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
         }
@@ -152,7 +171,7 @@
         }
 
         .chat-input button {
-            background-color: #1b1b2f;
+            background-color: #c77dff; /* Light Purple */
             color: white;
             border: none;
             padding: 10px 20px;
@@ -162,12 +181,12 @@
         }
 
         .chat-input button:hover {
-            background-color: #0f3460;
+            background-color: #7e57c2; /* Medium Purple */
         }
 
         .players-list {
             margin-top: 30px;
-            background-color: #162447;
+            background-color: #3f3cbb; /* Dark Blue */
             padding: 15px;
             border-radius: 12px;
             color: #f8f9fa;
@@ -181,6 +200,33 @@
             margin-top: 0;
             font-size: 1.4em;
             color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-friend-btn {
+            margin-left: 15px;
+            background-color: #7e57c2;
+            color: #f8f9fa;
+            border: none;
+            padding: 6px 12px; /* Smaller button size */
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em; /* Slightly smaller font size */
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .add-friend-btn i {
+            margin-right: 5px;
+        }
+
+        .add-friend-btn:hover {
+            background-color: #c77dff;
+            transform: translateY(-3px); /* Slight lift on hover */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow on hover */
         }
 
         .players-list ul {
@@ -202,10 +248,11 @@
 <body>
     <div class="header">
         Professional Web App
+        <i class="fas fa-cog settings-icon" title="Settings"></i>
     </div>
 
     <div class="container">
-        <div class="image-box">
+        <div class="image-box" id="imageBox">
             <img src="https://via.placeholder.com/500" alt="Game Area">
             <div class="overlay">
                 <div class="overlay-text">Hovered Text or Icon</div>
@@ -228,7 +275,9 @@
     </div>
 
     <div class="players-list">
-        <h3>Players in the Game</h3>
+        <h3>Players in the Game
+            <button class="add-friend-btn"><i class="fas fa-user-plus"></i>Add Friends</button>
+        </h3>
         <ul>
             <li>Player 1</li>
             <li>Player 2</li>
@@ -237,5 +286,29 @@
             <!-- More players can be added here -->
         </ul>
     </div>
+
+    <script>
+        const imageBox = document.getElementById('imageBox');
+
+        imageBox.addEventListener('mousemove', (e) => {
+            const boxRect = imageBox.getBoundingClientRect();
+            const x = e.clientX - boxRect.left;
+            const y = e.clientY - boxRect.top;
+
+            const rotateX = -(y - boxRect.height / 2) / 20;
+            const rotateY = (x - boxRect.width / 2) / 20;
+
+            imageBox.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        imageBox.addEventListener('mouseleave', () => {
+            imageBox.style.transform = 'rotateX(0) rotateY(0)';
+        });
+
+        const addFriendBtn = document.querySelector('.add-friend-btn');
+        addFriendBtn.addEventListener('click', () => {
+            alert('Add Friends button clicked!');
+        });
+    </script>
 </body>
 </html>
