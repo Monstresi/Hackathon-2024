@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 from flask_socketio import SocketIO, emit
 import socket
 import threading
@@ -48,6 +48,10 @@ def handle_send_message(data):
 
     # Emit the message back to all connected WebSocket clients
     socketio.emit('message', {'msg': f'You: {message}'})
+
+@app.route('/assets/<filename>')
+def serve_static(filename):
+    return send_from_directory('assets', filename)
 
 def send_to_others(message):
     try:
