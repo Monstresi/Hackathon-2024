@@ -6,6 +6,7 @@ clients = []  # List to keep track of connected clients
 class ChatHandler(socketserver.BaseRequestHandler):
     def handle(self):
         # Add the new client connection to the list of clients
+        username = self.request.recv(1024).decode()
         clients.append(self.request)
         print(f"{self.client_address} connected.")
         

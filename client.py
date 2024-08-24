@@ -20,6 +20,8 @@ def main():
     # Create a socket and connect to the server
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((host, port))
+    username = input("Enter a username: ")
+    sock.sendall(username.encode())
 
     # Start a thread for receiving messages from the server
     receive_thread = threading.Thread(target=receive_messages, args=(sock,))
