@@ -19,7 +19,7 @@ class ChatHandler(socketserver.BaseRequestHandler):
                 print(f"Received from {username}: {message}")
                 
                 # Broadcast the message to all connected clients
-                broadcast_message(f"{self.client_address} says: {message}", self.request)
+                broadcast_message(f"{username} says: {message}", self.request)
         except ConnectionResetError:
             print(f"{self.client_address} disconnected unexpectedly.")
         finally:
