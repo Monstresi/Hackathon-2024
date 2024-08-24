@@ -5,14 +5,17 @@ import json
 clients = []   # List to keep track of connected clients
 usernames = []
 
+file_lock = threading.Lock()
+
 class ChatHandler(socketserver.BaseRequestHandler):
     def handle(self):
         # Add the new client connection to the list of clients
         username = self.request.recv(1024).decode()
         usernames.append(username)
         clients.append(self.request)
-        with open('users.json', 'w') as file:
-            json.dump(usernames, file, indent=4)
+        with file_lock:
+            with open('users.json', 'w') as file:
+                json.dump(usernames, file, indent=4)
         print(f"{self.client_address}/{username} connected.")
         
         try:
