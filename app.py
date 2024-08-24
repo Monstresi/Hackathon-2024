@@ -8,7 +8,7 @@ socketio = SocketIO(app)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 local_ip = s.getsockname()[0]
-server_ip = '10.19.254.160'
+server_ip = '207.148.86.25'
 server_port = 9999
 messages = []
 usernames = []
