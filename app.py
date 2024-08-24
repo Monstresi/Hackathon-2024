@@ -3,7 +3,8 @@ import requests
 import socket
 import threading
 
-    
+messages = []
+
 app = Flask(__name__)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -23,6 +24,8 @@ def receive_messages():
             if not message:
                 break
             print(message)
+            messages.append(message)
+            return render_template('index.html', messages=messages) 
         except:
             print("Connection closed by the server.")
             break
@@ -32,7 +35,7 @@ receive_thread.start()
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('index.html', messages=messages)
 
 @app.route('/submit', methods=['POST'])
 def submit():

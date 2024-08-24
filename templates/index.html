@@ -205,11 +205,12 @@
                 Chat
             </div>
             <div class="chat-messages">
-                <!-- Messages will appear here -->
-                {% if message %}
-                <p>{{ message }}</p>
-                {% endif %}
+                <!-- Display all messages here -->
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
             </div>
+
             <div class="chat-input">
                 <form action="/submit" method="POST">
                     <label for="user_input">Enter something:</label>
