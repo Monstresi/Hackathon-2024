@@ -3,6 +3,7 @@ import threading
 import json
 import sys
 import random
+import re
 
 clients = []   # List to keep track of connected clients
 usernames = []
@@ -35,10 +36,13 @@ class ChatHandler(socketserver.BaseRequestHandler):
 
         # If everyone has connected
         print(f"Number of clients: {len(clients)}, {clients}, max: {max_clients}")
+
+
         if str(len(clients)) == max_clients:
             start_packet = "PKT_MSG_STR"
-            random_number = random.randint(1, 5)
-            broadcast_msg = f"{start_packet}:{random_number}"
+            random_number = random.randint(1, 5) # For the image
+            imposter_number = random.randint(0, len(usernames) - 1)
+            broadcast_msg = f"{start_packet}:{random_number}:{usernames[imposter_number]}"
             print(f"Broadcasting: {broadcast_msg}\n")
             broadcast_all(broadcast_msg, self.request)
         

@@ -7,11 +7,13 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+local_ip = s.getsockname()[0]
 server_ip = '10.19.254.160'
 server_port = 9999
 messages = []
 usernames = []
 result = None
+username = ''
 
 try:
     s.connect((server_ip, server_port))
@@ -20,6 +22,7 @@ except ConnectionRefusedError:
     print("Failed to connect to the server")
 
 def receive_messages():
+    global username
     while True:
         try:
             # Receive and broadcast messages from the server to all clients
@@ -38,7 +41,12 @@ def receive_messages():
                 socketio.emit('redirect', {'url': '/results'})
             elif message[:11] == 'PKT_MSG_STR':  # Start showing the image
                 item_number = message.split(':')[1]
+                imposter_username = message.split(':')[2]
                 print("IMAGES ARE BEING DISPLAYED NOW")
+
+                if username == imposter_username:
+                    print("You are the imposter!")
+                    continue
                 socketio.emit('show_image', {'item_number': item_number})
                 continue
 
@@ -72,8 +80,13 @@ def results():
 
 @socketio.on('send_message')
 def handle_send_message(data):
+    global username
     message = data['msg']
     print(f"User entered: {message}")
+
+    if username == '':
+        username = message
+        print(f"Username set to: {username}")
     
     # Send the message to the server
     send_to_others(message)
