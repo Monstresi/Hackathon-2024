@@ -4,16 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exposé</title>
-    <!-- <link rel="icon" type="image/x-icon" href="assets/favicon.ico"> -->
     <link rel="icon" href="assets/favicon.ico?v1" type="image/x-icon" />
-    <link rel="shortcut icon" href="favicon.ico?v1" type="image/x-icon" /> 
+    <link rel="shortcut icon" href="favicon.ico?v1" type="image/x-icon" />
     <style>
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             color: #f8f9fa;
-            /* Update this path to the correct location of your image */
             background: url('assets/background.jpg') no-repeat center center fixed;
             background-size: cover;
             display: flex;
@@ -22,7 +20,7 @@
             min-height: 100vh;
             justify-content: center;
         }
-    
+
         .header {
             width: 100%;
             text-align: center;
@@ -34,7 +32,7 @@
             font-weight: bold;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         }
-    
+
         .container {
             display: flex;
             width: 80%;
@@ -46,7 +44,7 @@
             border-radius: 12px;
             box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
         }
-    
+
         .image-box {
             flex: 2;
             background-color: #4a148c; /* Darker Purple */
@@ -59,21 +57,21 @@
             margin-right: 20px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
-    
+
         .image-box img {
             max-width: 100%;
             max-height: 350px;
             border-radius: 8px;
             margin-bottom: 10px;
         }
-    
+
         .image-name {
             font-size: 1.2em;
             color: #f8f9fa;
             text-align: center;
             margin-top: 10px;
         }
-    
+
         .chat-box {
             flex: 2;
             background-color: #4a148c; /* Darker Purple */
@@ -86,7 +84,7 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             max-height: 600px;
         }
-    
+
         .chat-header {
             background-color: #5e35b1; /* Darker Purple */
             padding: 10px;
@@ -96,7 +94,7 @@
             font-weight: bold;
             color: #f8f9fa;
         }
-    
+
         .chat-messages {
             flex-grow: 1;
             overflow-y: auto;
@@ -106,11 +104,11 @@
             border-radius: 8px;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
         }
-    
+
         .chat-input {
             display: flex;
         }
-    
+
         .guess-button {
             background-color: #5e35b1; /* Darker Purple */
             color: white;
@@ -121,7 +119,7 @@
             font-size: 1em;
             margin-left: 10px;
         }
-    
+
         .send-button {
             background-color: #5e35b1; /* Darker Purple */
             color: white;
@@ -132,7 +130,7 @@
             font-size: 1em;
             margin-left: 10px;
         }
-    
+
         .chat-input input {
             flex-grow: 1;
             padding: 10px;
@@ -143,7 +141,7 @@
             background-color: #e4e4e4;
             color: #333;
         }
-    
+
         .chat-input button {
             background-color: #5e35b1; /* Darker Purple */
             color: white;
@@ -153,11 +151,11 @@
             cursor: pointer;
             font-size: 1em;
         }
-    
+
         .chat-input button:hover {
             background-color: #311b92; /* Even Darker Purple */
         }
-    
+
         .players-list {
             margin-top: 30px;
             background-color: #4a148c; /* Darker Purple */
@@ -169,13 +167,13 @@
             max-width: 1200px;
             text-align: center;
         }
-    
+
         .players-list h3 {
             margin-top: 0;
             font-size: 1.4em;
             color: #f8f9fa;
         }
-    
+
         .players-list ul {
             list-style-type: none;
             padding: 0;
@@ -184,15 +182,13 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-    
+
         .players-list ul li {
             margin: 5px 15px;
             font-size: 1.1em;
             color: #e4e4e4;
         }
     </style>
-    
-    
 </head>
 <body>
     <div class="header">
@@ -201,8 +197,8 @@
 
     <div class="container">
         <div class="image-box">
-            <img src="https://via.placeholder.com/500" alt="Game Area">
-            <div class="image-name">Image Name or Description</div>
+            <img id="random-image" src="" alt="Random Image">
+            <div class="image-name" id="image-name">Image Name or Description</div>
         </div>
         
         <div class="chat-box">
@@ -258,6 +254,27 @@
             socket.emit('send_message', {msg: userInput});
             document.getElementById('user_input').value = '';
         });
+
+        // Array of images and their names/descriptions
+        const images = [
+            { src: 'assets/items/messi.jpg', name: 'Lionel Messi' },
+            { src: 'assets/items/ronaldo.jpg', name: 'Cristiano Ronaldo' },
+            { src: 'assets/items/lebron.jpg', name: 'LeBron James' },
+            { src: 'assets/items/usain.jpg', name: 'Usain Bolt' },
+            { src: 'assets/items/shane.jpg', name: 'Shane Warne' }
+            // Add more images and descriptions as needed
+        ];
+
+        // Function to select a random image and update the name
+        function displayRandomImage() {
+            const randomIndex = Math.floor(Math.random() * images.length);
+            const randomImage = images[randomIndex];
+            document.getElementById('random-image').src = randomImage.src;
+            document.getElementById('image-name').textContent = randomImage.name;
+        }
+
+        // Display a random image on page load
+        window.onload = displayRandomImage;
     </script>
 </body>
 </html>

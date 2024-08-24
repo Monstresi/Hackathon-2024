@@ -65,6 +65,10 @@ def handle_send_message(data):
 def serve_static(filename):
     return send_from_directory('assets', filename)
 
+@app.route('/assets/items/<filename>')
+def serve_static_items(filename):
+    return send_from_directory('assets/items', filename)
+
 def send_to_others(message):
     try:
         messages.append(message)
