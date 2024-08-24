@@ -9,6 +9,8 @@ usernames = []
 messages = []
 votes = []
 
+max_clients = 0
+
 file_lock = threading.Lock()
 
 # Check if there are enough arguments
@@ -32,11 +34,12 @@ class ChatHandler(socketserver.BaseRequestHandler):
         print(f"{self.client_address}/{username} connected.")
 
         # If everyone has connected
-        if len(clients) == max_clients:
+        print(f"Number of clients: {len(clients)}, {clients}, max: {max_clients}")
+        if str(len(clients)) == max_clients:
             start_packet = "PKT_MSG_STR"
             random_number = random.randint(1, 5)
-            voting_packet = f"{start_packet}:{random_number}"
-            print(f"Broadcasting: {broadcast_msg}")
+            broadcast_msg = f"{start_packet}:{random_number}"
+            print(f"Broadcasting: {broadcast_msg}\n")
             broadcast_all(broadcast_msg, self.request)
         
         try:

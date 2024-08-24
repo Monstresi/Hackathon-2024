@@ -27,15 +27,21 @@ def receive_messages():
             if not message:
                 break
             print(message)
+            
             if message[:11] == 'PKT_MSG_VTE':
                 global usernames
                 usernames = message.split(';')[1].split(':')
                 socketio.emit('redirect', {'url': '/voting'})
-            if message[:11] == 'PKT_MSG_RES':
+            elif message[:11] == 'PKT_MSG_RES':
                 global result
                 result = message.split(':')[1]
                 socketio.emit('redirect', {'url': '/results'})
-            
+            elif message[:11] == 'PKT_MSG_STR':  # Start showing the image
+                item_number = message.split(':')[1]
+                print("IMAGES ARE BEING DISPLAYED NOW")
+                socketio.emit('show_image', {'item_number': item_number})
+                continue
+
             messages.append(message)
             
             # Emit the message to all connected WebSocket clients
@@ -63,7 +69,6 @@ def vote():
 def results():
     global result
     return render_template('result.html', result=result)
-
 
 @socketio.on('send_message')
 def handle_send_message(data):
