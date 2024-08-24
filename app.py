@@ -1,11 +1,10 @@
-from flask import Flask, request, render_template
-import requests
+from flask import Flask, render_template
+from flask_socketio import SocketIO, emit
 import socket
 import threading
 
-messages = []
-
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_ip = '10.19.254.160'
@@ -19,13 +18,15 @@ except ConnectionRefusedError:
 def receive_messages():
     while True:
         try:
-            # Receive and print messages from the server
+            # Receive and broadcast messages from the server to all clients
             message = s.recv(1024).decode()
             if not message:
                 break
             print(message)
-            messages.append(message)
-            return render_template('index.html', messages=messages) 
+            
+            # Emit the message to all connected WebSocket clients
+            socketio.emit('message', {'msg': message})
+            
         except:
             print("Connection closed by the server.")
             break
@@ -33,20 +34,20 @@ def receive_messages():
 receive_thread = threading.Thread(target=receive_messages)
 receive_thread.start()
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def index():
-    return render_template('index.html', messages=messages)
+    return render_template('index.html')
 
-@app.route('/submit', methods=['POST'])
-def submit():
-    user_input = request.form['user_input']
-    print(f"User entered: {user_input}")
-
-    send_to_others(f"{user_input}")
+@socketio.on('send_message')
+def handle_send_message(data):
+    message = data['msg']
+    print(f"User entered: {message}")
     
-    # Render the HTML with the server response
-    return render_template('index.html', message=f'You entered: {user_input}')
+    # Send the message to the server
+    send_to_others(message)
 
+    # Emit the message back to all connected WebSocket clients
+    socketio.emit('message', {'msg': f'You: {message}'})
 
 def send_to_others(message):
     try:
@@ -55,4 +56,4 @@ def send_to_others(message):
         print("Error sending message to server")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, debug=True)
