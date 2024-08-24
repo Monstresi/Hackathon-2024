@@ -12,7 +12,7 @@ server_ip = '207.148.86.25'
 server_port = 9999
 messages = []
 usernames = []
-result = None
+result = []
 username = ''
 
 try:
@@ -37,7 +37,7 @@ def receive_messages():
                 socketio.emit('redirect', {'url': '/voting'})
             elif message[:11] == 'PKT_MSG_RES':
                 global result
-                result = message.split(':')[1]
+                result = message.split(':')
                 socketio.emit('redirect', {'url': '/results'})
             elif message[:11] == 'PKT_MSG_STR':  # Start showing the image
                 item_number = message.split(':')[1]
