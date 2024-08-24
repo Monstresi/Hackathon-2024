@@ -9,6 +9,7 @@ clients = []   # List to keep track of connected clients
 usernames = []
 messages = []
 votes = []
+imposter = ''
 
 max_clients = 0
 
@@ -26,6 +27,7 @@ else:
 class ChatHandler(socketserver.BaseRequestHandler):
     def handle(self):
         # Add the new client connection to the list of clients
+        global imposter
         username = self.request.recv(1024).decode()
         usernames.append(username)
         clients.append(self.request)
@@ -42,6 +44,8 @@ class ChatHandler(socketserver.BaseRequestHandler):
             start_packet = "PKT_MSG_STR"
             random_number = random.randint(1, 5) # For the image
             imposter_number = random.randint(0, len(usernames) - 1)
+            imposter = usernames[imposter_number]
+            print(f"the imposter in 48 is {imposter}")
             broadcast_msg = f"{start_packet}:{random_number}:{usernames[imposter_number]}"
             print(f"Broadcasting: {broadcast_msg}\n")
             broadcast_all(broadcast_msg, self.request)
@@ -59,7 +63,11 @@ class ChatHandler(socketserver.BaseRequestHandler):
                     if len(votes) == len(usernames):
                         most_common_vote = find_most_common()
                         print(f"Most common vote: {most_common_vote}")
-                        result_packet = f"PKT_MSG_RES:{most_common_vote}"
+                        if most_common_vote == imposter:
+                            result_packet = f"PKT_MSG_RES:{most_common_vote}:Win"
+                        else:
+                            result_packet = f"PKT_MSG_RES:{most_common_vote}:Lose"
+                        print(f"result packet is {result_packet}")
                         broadcast_all(result_packet, self.request)
                     continue
                 messages.append(f"{username}: {message}")
