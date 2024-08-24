@@ -1,8 +1,7 @@
 import socketserver
 import threading
-from flask import Flask, render_template, request
 
-clients = []  # List to keep track of connected clients
+clients = []   # List to keep track of connected clients
 
 class ChatHandler(socketserver.BaseRequestHandler):
     def handle(self):
