@@ -60,7 +60,7 @@ class ChatHandler(socketserver.BaseRequestHandler):
                         most_common_vote = find_most_common()
                         print(f"Most common vote: {most_common_vote}")
                         result_packet = f"PKT_MSG_RES:{most_common_vote}"
-                        broadcast_message(result_packet, self.request)
+                        broadcast_all(result_packet, self.request)
                     continue
                 messages.append(f"{username}: {message}")
                 

@@ -2,15 +2,74 @@
 <html>
     <head>
         <style>
+            body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers content horizontally */
+            text-align: center;
+        }
 
+        /* Typography */
+        h1, p {
+            margin: 0;
+            padding: 0;
+            color: #333; /* A subtle text color for readability */
+        }
+
+        /* Buttons */
+        .user-buttons {
+            margin-left: 5px;
+            background-color: #ba0b0b; /* Use hexadecimal for consistent color */
+            color: white;
+            height: 30px;
+            border-radius: 15px;
+            border: none; /* Remove default border */
+            cursor: pointer; /* Change cursor on hover */
+            padding: 0 10px; /* Add padding for better spacing */
+            transition: background-color 0.3s ease; /* Smooth transition effect */
+        }
+
+        .user-buttons:hover {
+            background-color: #a00909; /* Darken color on hover */
+        }
+
+        /* List Items */
+        .list-item {
+            height: 30px;
+            margin-bottom: 10px;
+            line-height: 30px; /* Vertically center text */
+            color: #333; /* Text color matching headers and paragraphs */
+        }
+
+        /* Header and List alignment */
+        .header, .user-list {
+            margin-bottom: 20px; /* Add some space below the header and user list */
+        }
+
+        /* Centering Content */
+        .header {
+            text-align: center;
+            font-size: 2rem; /* Larger font size for the header */
+        }
+
+        .user-list {
+            width: 100%;
+            max-width: 400px; /* Constrain the width for a clean look */
+            list-style-type: none; /* Remove bullets */
+            padding: 0;
+            margin: 0 auto; /* Center list */
+        }
         </style>
     </head>
 
     <body>
-        <h1>Voting</h1>
-        <ul>
+        <h1 class="header">Voting</h1>
+        <ul style="list-style-type: none;" class="user-list">
             {% for username in usernames %}
-                <li>{{ username }} <button data-username="{{ username }}" class="user-buttons">Vote</button> </li>
+                <li class="list-item">{{ username }} <button data-username="{{ username }}" class="user-buttons">Vote</button> </li>
         
             {% endfor %}
         </ul>
