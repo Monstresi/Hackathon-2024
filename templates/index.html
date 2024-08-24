@@ -247,6 +247,10 @@
             chatMessages.appendChild(newMessage);
         });
 
+        socket.on('redirect', function(data) {
+            window.location.href = data.url;
+        });
+
         // Handle form submission and send the message via WebSocket
         document.getElementById('chat-form').addEventListener('submit', function(e) {
             e.preventDefault();

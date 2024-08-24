@@ -9,6 +9,7 @@ socketio = SocketIO(app)
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_ip = '10.19.254.160'
 server_port = 9999
+messages = []
 try:
     s.connect((server_ip, server_port))
     print("Connected to server")
@@ -17,12 +18,16 @@ except ConnectionRefusedError:
 
 def receive_messages():
     while True:
+        'PKT_MSG_VTE'
         try:
             # Receive and broadcast messages from the server to all clients
             message = s.recv(1024).decode()
             if not message:
                 break
             print(message)
+            if message == 'PKT_MSG_VTE':
+                socketio.emit('redirect', {'url': '/voting'})
+            messages.append(message)
             
             # Emit the message to all connected WebSocket clients
             socketio.emit('message', {'msg': message})
@@ -35,8 +40,15 @@ receive_thread = threading.Thread(target=receive_messages)
 receive_thread.start()
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def index(flag=False):
+    if not flag:
+        return render_template('index.html')
+
+@app.route('/voting')
+def vote():
+    return render_template('voting.html')
+
+
 
 @socketio.on('send_message')
 def handle_send_message(data):
@@ -55,6 +67,7 @@ def serve_static(filename):
 
 def send_to_others(message):
     try:
+        messages.append(message)
         s.sendall(message.encode())
     except:
         print("Error sending message to server")
