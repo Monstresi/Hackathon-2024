@@ -206,11 +206,19 @@
             </div>
             <div class="chat-messages">
                 <!-- Messages will appear here -->
+                {% if message %}
+                <p>{{ message }}</p>
+                {% endif %}
             </div>
             <div class="chat-input">
-                <input type="text" placeholder="Type a message...">
-                <button class="send-button">Send</button>
-                <button class="guess-button">Guess</button>
+                <form action="/submit" method="POST">
+                    <label for="user_input">Enter something:</label>
+                    <input type="text" id="user_input" name="user_input" required>
+                    <button type="send">Submit</button>
+                    <button type="guess">Submit</button>
+                </form>
+                
+        
             </div>
         </div>
     </div>
