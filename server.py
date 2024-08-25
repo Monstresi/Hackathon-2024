@@ -109,7 +109,7 @@ def broadcast_message(message, sender_socket):
 
 def find_most_common():
     usr_map = {}
-    for username in usernames:
+    for username in votes:
         if username in usr_map:
             usr_map[username] += 1
         else:
