@@ -46,6 +46,7 @@ def receive_messages():
 
                 if username == imposter_username:
                     print("You are the imposter!")
+                    socketio.emit('show_image', {'item_number': 6})
                     continue
                 socketio.emit('show_image', {'item_number': item_number})
                 continue
