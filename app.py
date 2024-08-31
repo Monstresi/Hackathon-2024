@@ -8,12 +8,16 @@ socketio = SocketIO(app)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 local_ip = s.getsockname()[0]
-server_ip = '207.148.86.25'
+server_ip = ''
 server_port = 9999
 messages = []
 usernames = []
 result = []
 username = ''
+
+if server_ip == "":
+    print("Please set the server IP address in the code.")
+    exit()
 
 try:
     s.connect((server_ip, server_port))
